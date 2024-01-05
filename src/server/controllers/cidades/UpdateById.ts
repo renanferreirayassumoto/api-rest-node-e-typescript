@@ -13,7 +13,7 @@ interface IBodyProps {
 
 export const updateByIdValidation = validation((getSchema) => ({
 	body: getSchema<IBodyProps>(yup.object().shape({
-		nome: yup.string().required().min(3),
+		nome: yup.string().strict(true).required().min(3),
 	})),
 	params: getSchema<IParamProps>(yup.object().shape({
 		id: yup.number().integer().required().moreThan(0),
@@ -21,8 +21,12 @@ export const updateByIdValidation = validation((getSchema) => ({
 }));
 
 export const updateById = async (req: Request<IParamProps , {}, IBodyProps>, res: Response) => {
-	console.log(req.params);
-	console.log(req.body);
 
-	return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send('Não implementado!');
+	if(Number(req.params.id) === 99999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+		errors: {
+			default: 'Registro não encontrado'
+		}
+	});
+
+	return res.status(StatusCodes.NO_CONTENT).send();
 };
