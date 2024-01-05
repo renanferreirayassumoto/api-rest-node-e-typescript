@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "production": "node ./build/index.js",
-    "postinstall": "tsc",
+    "postinstall": "prisma generate",
     "test": "jest",
     "build": "prisma generate && rimraf build && tsc",
     "start": "nodemon src/index.ts",
