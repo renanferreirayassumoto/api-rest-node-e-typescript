@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middleware';
 import { StatusCodes } from 'http-status-codes';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
 
 interface ICidade {
   nome: string;
@@ -14,7 +17,9 @@ export const createValidation = validation((getSchema) => ({
 }));
 
 export const create = async (req: Request<{}, {}, ICidade>, res: Response) => {
-	console.log(req.body);
+	const novaCidade = await prisma.cidade.create({
+		data: req.body,
+	});
 
-	return res.status(StatusCodes.CREATED).json(1);
+	return res.status(StatusCodes.CREATED).json(novaCidade);
 };

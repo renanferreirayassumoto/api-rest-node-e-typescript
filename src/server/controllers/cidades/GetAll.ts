@@ -29,12 +29,4 @@ export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Respons
 	res.setHeader('x-total-count', 1);
 
 	return res.status(StatusCodes.OK).json(cidades);
-
-
-	// return res.status(StatusCodes.OK).json([
-	// 	{
-	// 		id: 1,
-	// 		nome: 'Campo Grande',
-	// 	}
-	// ]);
 };
