@@ -1,6 +1,9 @@
 {
   "name": "api-rest-node-typescript",
   "version": "1.0.0",
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seeds/seed.ts"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
