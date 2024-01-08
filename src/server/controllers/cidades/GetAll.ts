@@ -1,12 +1,8 @@
 import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middleware';
-// import { StatusCodes } from 'http-status-codes';
-import {PrismaClient} from '@prisma/client';
 import { StatusCodes } from 'http-status-codes';
-
-
-const prisma = new PrismaClient();
+import { CidadesProvider } from '../../database/providers/cidades';
 
 interface IQueryProps {
   page?: number;
@@ -24,7 +20,14 @@ export const getAllValidation = validation((getSchema) => ({
 
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
 
-	const cidades = await prisma.cidade.findMany();
+	const cidades = await CidadesProvider.getAll();
+	if (cidades instanceof Error){
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			errors: {
+				default: cidades.message,
+			}
+		});
+	}
 	res.setHeader('access-control-expose-headers', 'x-total-count');
 	res.setHeader('x-total-count', 1);
 

@@ -2,9 +2,9 @@ import { Request, Response } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middleware';
 import { StatusCodes } from 'http-status-codes';
-import { PrismaClient } from '@prisma/client';
+import { CidadesProvider } from '../../database/providers/cidades';
+import { UpdateCidadeDto } from '../../database/dto/update-cidade-dto';
 
-const prisma = new PrismaClient();
 
 interface IParamProps {
   id?: number;
@@ -26,37 +26,19 @@ export const updateByIdValidation = validation((getSchema) => ({
 export const updateById = async (req: Request<IParamProps , {}, IBodyProps>, res: Response) => {
 
 	const id = Number(req.params.id);
-	const data = req.body.nome;
+	const data: UpdateCidadeDto = req.body;
 
-	if(id === 99999) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-		errors: {
-			default: 'Registro não encontrado'
-		}
-	});
+	const result = await CidadesProvider.updateById(id, data);
 
-	const cidadeExistente = await prisma.cidade.findFirst({
-		where: {
-			id: id,
-		}
-	});
-
-
-	if(!cidadeExistente){
-		return res.status(StatusCodes.NOT_FOUND).json({
-			errros: {
-				default: 'Registro não encontrado',
+	if (result instanceof Error){
+		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+			erros: {
+				default: 'Erro na atualização do registro'
 			}
 		});
 	}
 
-	const cidadeAtualizada = await prisma.cidade.update({
-		where: {
-			id: id,
-		},
-		data: {
-			nome: data,
-		},
-	});
+	return res.status(StatusCodes.OK).send(result);
 
-	return res.status(StatusCodes.OK).send(cidadeAtualizada);
+
 };

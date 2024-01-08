@@ -12,6 +12,15 @@ datasource db {
 }
 
 model Cidade{
-  id Int @id @default(autoincrement())
+  id Int @id @default(autoincrement()) 
   nome String 
+  pessoas Pessoa[]
+}
+
+model Pessoa{
+  id Int @id @default(autoincrement()) 
+  nomeCompleto String 
+  email String @unique 
+  cidade Cidade @relation(fields: [cidadeId], references: [id])
+  cidadeId Int 
 }

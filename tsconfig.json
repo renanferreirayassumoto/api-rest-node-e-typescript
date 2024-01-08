@@ -111,5 +111,8 @@
     "./node_modules",
     "./tests",
     "./build"
+  ],
+  "include": [
+    "c:/Users/Renan/Desktop/api-node-jwt/src/**/*.ts"
   ]
 }
