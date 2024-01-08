@@ -37,7 +37,13 @@ export const deleteById = async (req: Request<IParamProps>, res: Response) => {
 		return res.status(StatusCodes.NOT_FOUND).send();
 	}
 
-	await prisma.cidade.deleteMany({});
+	// await prisma.cidade.deleteMany({});
+
+	await prisma.cidade.delete({
+		where: {
+			id: id,
+		}
+	});
 
 	return res.status(StatusCodes.NO_CONTENT).send();
 };
