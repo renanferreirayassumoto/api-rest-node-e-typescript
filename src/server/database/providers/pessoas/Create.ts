@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
-import { IPessoa } from '../../models/Pessoa';
+import { IPessoa } from '../../models';
 
 const prisma = new PrismaClient();
 
-export const create = async (pessoa: IPessoa) =>{
+export const create = async (pessoa: Omit<IPessoa, 'id'>) =>{
 	try{
 
 		const result = await prisma.pessoa.create({

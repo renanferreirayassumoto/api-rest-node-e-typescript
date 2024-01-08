@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import { UpdatePessoaDto } from '../../dto/update-pessoa-dto';
+import { IPessoa } from '../../models';
 
 const prisma = new PrismaClient();
 
-export const updateById = async (id: number, updatePessoaDto: UpdatePessoaDto) => {
+export const updateById = async (id: number, pessoa: Omit<IPessoa, 'id'>) => {
 	try {
 		const result = await prisma.pessoa.update({
 			where: { id: id },
-			data: updatePessoaDto,
+			data: pessoa,
 		});
 		return result;
 	} catch (error) {

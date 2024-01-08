@@ -18,6 +18,6 @@ export const getById = async (id: number) =>{
 		}
 	}catch(error){
 		console.error(error);
-		return new Error('Erro ao criar o registro');
+		return new Error('Registro não encontrado');
 	}
 };

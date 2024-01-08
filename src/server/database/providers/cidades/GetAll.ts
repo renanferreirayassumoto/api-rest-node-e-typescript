@@ -5,9 +5,7 @@ const prisma = new PrismaClient();
 export const getAll = async () =>{
 	try{
 
-		const result = await prisma.cidade.findMany({
-
-		});
+		const result = await prisma.cidade.findMany();
 
 		if (result) {
 			return result;

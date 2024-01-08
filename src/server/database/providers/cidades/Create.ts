@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
-import { CreateCidadeDto } from '../../dto/create-cidade-dto';
+import { ICidade } from '../../models';
 
 const prisma = new PrismaClient();
 
-export const create = async (createCidadeDto: CreateCidadeDto) =>{
+export const create = async (cidade: Omit<ICidade, 'id'>) =>{
 	try{
 
 		const result = await prisma.cidade.create({
-			data: createCidadeDto,
+			data: cidade,
 		});
 
 		if (result) {
