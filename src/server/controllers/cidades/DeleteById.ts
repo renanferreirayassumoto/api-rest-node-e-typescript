@@ -22,7 +22,7 @@ export const deleteById = async (req: Request<IParamProps>, res: Response) => {
 
 	if (result instanceof Error){
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			erros: {
+			errors: {
 				default: 'Erro na atualização do registro'
 			}
 		});

@@ -32,7 +32,7 @@ export const updateById = async (req: Request<IParamProps , {}, IBodyProps>, res
 
 	if (result instanceof Error){
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
-			erros: {
+			errors: {
 				default: 'Erro na atualização do registro'
 			}
 		});
