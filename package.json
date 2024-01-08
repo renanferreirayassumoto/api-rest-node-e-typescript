@@ -13,12 +13,7 @@
     "build": "prisma generate && rimraf build && tsc",
     "start": "nodemon src/index.ts",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add build",
-    "pre-commit": [
-      "ts.check",
-      "build",
-      "add-build"
-    ]
+    "add-build": "git add build"
   },
   "author": "Renan Ferreira",
   "license": "ISC",
