@@ -20,7 +20,9 @@ export const getAllValidation = validation((getSchema) => ({
 
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
 
-	const cidades = await PessoasProvider.getAll(req.query.page || 1, req.query.limit || 7, req.query.filter || '');
+	const limite = Number(req.query.limit);
+
+	const cidades = await PessoasProvider.getAll(req.query.page || 1, limite || 7, req.query.filter || '');
 	const count = await PessoasProvider.count(req.query.filter);
 
 	if (cidades instanceof Error){

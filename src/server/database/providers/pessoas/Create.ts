@@ -14,7 +14,6 @@ export const create = async (pessoa: Omit<IPessoa, 'id'>) =>{
 			return result;
 		}
 	}catch(error){
-		console.error(error);
 		return new Error('Erro ao criar o registro');
 	}
 };
