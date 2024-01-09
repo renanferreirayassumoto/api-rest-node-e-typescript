@@ -24,3 +24,10 @@ model Pessoa{
   cidade Cidade @relation(fields: [cidadeId], references: [id])
   cidadeId Int 
 }
+
+model Usuario{
+  id Int @id @default(autoincrement())
+  nome String 
+  email String @unique
+  senha String
+}
