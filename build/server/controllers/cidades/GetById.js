@@ -36,21 +36,22 @@ exports.getById = exports.getByIdValidation = void 0;
 const yup = __importStar(require("yup"));
 const middleware_1 = require("../../shared/middleware");
 const http_status_codes_1 = require("http-status-codes");
+const cidades_1 = require("../../database/providers/cidades");
 exports.getByIdValidation = (0, middleware_1.validation)((getSchema) => ({
     params: getSchema(yup.object().shape({
         id: yup.number().integer().required().moreThan(0),
     })),
 }));
 const getById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    if (Number(req.params.id) === 99999)
+    const id = Number(req.params.id);
+    const result = yield cidades_1.CidadesProvider.getById(id);
+    if (result instanceof Error) {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
-                default: 'Registro não encontrado'
+                default: result.message,
             }
         });
-    return res.status(http_status_codes_1.StatusCodes.OK).json({
-        id: req.params.id,
-        nome: 'Campo Grande'
-    });
+    }
+    return res.status(http_status_codes_1.StatusCodes.OK).json(result);
 });
 exports.getById = getById;

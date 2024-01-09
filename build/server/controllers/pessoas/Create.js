@@ -36,21 +36,23 @@ exports.create = exports.createValidation = void 0;
 const yup = __importStar(require("yup"));
 const middleware_1 = require("../../shared/middleware");
 const http_status_codes_1 = require("http-status-codes");
-const cidades_1 = require("../../database/providers/cidades");
+const pessoas_1 = require("../../database/providers/pessoas");
 exports.createValidation = (0, middleware_1.validation)((getSchema) => ({
     body: getSchema(yup.object().shape({
-        nome: yup.string().strict(true).required().min(3),
+        email: yup.string().required().email(),
+        cidadeId: yup.number().integer().required().min(1),
+        nomeCompleto: yup.string().required().min(3)
     })),
 }));
 const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const novaCidade = yield cidades_1.CidadesProvider.create(req.body);
-    if (novaCidade instanceof Error) {
+    const novaPessoa = yield pessoas_1.PessoasProvider.create(req.body);
+    if (novaPessoa instanceof Error) {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
-                default: novaCidade.message,
+                default: novaPessoa.message,
             }
         });
     }
-    return res.status(http_status_codes_1.StatusCodes.CREATED).json(novaCidade);
+    return res.status(http_status_codes_1.StatusCodes.CREATED).json(novaPessoa);
 });
 exports.create = create;

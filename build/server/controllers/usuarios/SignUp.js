@@ -32,25 +32,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = exports.createValidation = void 0;
+exports.signUp = exports.signUpValidation = void 0;
 const yup = __importStar(require("yup"));
 const middleware_1 = require("../../shared/middleware");
 const http_status_codes_1 = require("http-status-codes");
-const cidades_1 = require("../../database/providers/cidades");
-exports.createValidation = (0, middleware_1.validation)((getSchema) => ({
+const usuarios_1 = require("../../database/providers/usuarios");
+exports.signUpValidation = (0, middleware_1.validation)((getSchema) => ({
     body: getSchema(yup.object().shape({
         nome: yup.string().strict(true).required().min(3),
+        email: yup.string().required().email().min(5),
+        senha: yup.string().required().min(6)
     })),
 }));
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const novaCidade = yield cidades_1.CidadesProvider.create(req.body);
-    if (novaCidade instanceof Error) {
+const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const novoUsuario = yield usuarios_1.UsuariosProvider.create(req.body);
+    if (novoUsuario instanceof Error) {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
-                default: novaCidade.message,
+                default: novoUsuario.message,
             }
         });
     }
-    return res.status(http_status_codes_1.StatusCodes.CREATED).json(novaCidade);
+    return res.status(http_status_codes_1.StatusCodes.CREATED).json(novoUsuario);
 });
-exports.create = create;
+exports.signUp = signUp;

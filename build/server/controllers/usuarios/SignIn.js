@@ -32,25 +32,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = exports.createValidation = void 0;
+exports.signIn = exports.signInValidation = void 0;
 const yup = __importStar(require("yup"));
 const middleware_1 = require("../../shared/middleware");
 const http_status_codes_1 = require("http-status-codes");
-const cidades_1 = require("../../database/providers/cidades");
-exports.createValidation = (0, middleware_1.validation)((getSchema) => ({
+const usuarios_1 = require("../../database/providers/usuarios");
+exports.signInValidation = (0, middleware_1.validation)((getSchema) => ({
     body: getSchema(yup.object().shape({
-        nome: yup.string().strict(true).required().min(3),
+        email: yup.string().required().email().min(5),
+        senha: yup.string().required().min(6)
     })),
 }));
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const novaCidade = yield cidades_1.CidadesProvider.create(req.body);
-    if (novaCidade instanceof Error) {
-        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email, senha } = req.body;
+    const result = yield usuarios_1.UsuariosProvider.getByEmail(email);
+    if (result instanceof Error) {
+        return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).json({
             errors: {
-                default: novaCidade.message,
+                default: 'Email ou senha são inválidos'
             }
         });
     }
-    return res.status(http_status_codes_1.StatusCodes.CREATED).json(novaCidade);
+    if (senha !== result.senha) {
+        return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).json({
+            errors: {
+                default: 'Email ou senha são inválidos'
+            }
+        });
+    }
+    else {
+        return res.status(http_status_codes_1.StatusCodes.OK).json({
+            accessToken: 'teste.teste.teste'
+        });
+    }
 });
-exports.create = create;
+exports.signIn = signIn;

@@ -36,6 +36,7 @@ exports.getAll = exports.getAllValidation = void 0;
 const yup = __importStar(require("yup"));
 const middleware_1 = require("../../shared/middleware");
 const http_status_codes_1 = require("http-status-codes");
+const cidades_1 = require("../../database/providers/cidades");
 exports.getAllValidation = (0, middleware_1.validation)((getSchema) => ({
     query: getSchema(yup.object().shape({
         page: yup.number().optional().moreThan(0),
@@ -44,13 +45,16 @@ exports.getAllValidation = (0, middleware_1.validation)((getSchema) => ({
     })),
 }));
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const cidades = yield cidades_1.CidadesProvider.getAll();
+    if (cidades instanceof Error) {
+        return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+            errors: {
+                default: cidades.message,
+            }
+        });
+    }
     res.setHeader('access-control-expose-headers', 'x-total-count');
     res.setHeader('x-total-count', 1);
-    return res.status(http_status_codes_1.StatusCodes.OK).json([
-        {
-            id: 1,
-            nome: 'Campo Grande',
-        }
-    ]);
+    return res.status(http_status_codes_1.StatusCodes.OK).json(cidades);
 });
 exports.getAll = getAll;

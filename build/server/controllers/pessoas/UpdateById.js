@@ -32,25 +32,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = exports.createValidation = void 0;
+exports.updateById = exports.updateByIdValidation = void 0;
 const yup = __importStar(require("yup"));
 const middleware_1 = require("../../shared/middleware");
 const http_status_codes_1 = require("http-status-codes");
-const cidades_1 = require("../../database/providers/cidades");
-exports.createValidation = (0, middleware_1.validation)((getSchema) => ({
+const pessoas_1 = require("../../database/providers/pessoas");
+exports.updateByIdValidation = (0, middleware_1.validation)((getSchema) => ({
     body: getSchema(yup.object().shape({
-        nome: yup.string().strict(true).required().min(3),
+        email: yup.string().strict(true).required().min(3),
+        cidadeId: yup.number().integer().required().moreThan(0),
+        nomeCompleto: yup.string().required().min(3),
     })),
+    params: getSchema(yup.object().shape({
+        id: yup.number().integer().required().moreThan(0),
+    }))
 }));
-const create = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const novaCidade = yield cidades_1.CidadesProvider.create(req.body);
-    if (novaCidade instanceof Error) {
+const updateById = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    const data = req.body;
+    const result = yield pessoas_1.PessoasProvider.updateById(id, data);
+    if (result instanceof Error) {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
-                default: novaCidade.message,
+                default: 'Erro na atualização do registro'
             }
         });
     }
-    return res.status(http_status_codes_1.StatusCodes.CREATED).json(novaCidade);
+    return res.status(http_status_codes_1.StatusCodes.OK).send(result);
 });
-exports.create = create;
+exports.updateById = updateById;
