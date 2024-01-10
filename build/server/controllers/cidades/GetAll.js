@@ -45,16 +45,16 @@ exports.getAllValidation = (0, middleware_1.validation)((getSchema) => ({
     })),
 }));
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const cidades = yield cidades_1.CidadesProvider.getAll();
-    if (cidades instanceof Error) {
+    const result = yield cidades_1.CidadesProvider.getAll();
+    if (result instanceof Error) {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
-                default: cidades.message,
+                default: result.message,
             }
         });
     }
     res.setHeader('access-control-expose-headers', 'x-total-count');
     res.setHeader('x-total-count', 1);
-    return res.status(http_status_codes_1.StatusCodes.OK).json(cidades);
+    return res.status(http_status_codes_1.StatusCodes.OK).json(result);
 });
 exports.getAll = getAll;

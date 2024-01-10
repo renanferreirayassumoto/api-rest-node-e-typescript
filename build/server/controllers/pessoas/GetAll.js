@@ -46,12 +46,12 @@ exports.getAllValidation = (0, middleware_1.validation)((getSchema) => ({
 }));
 const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const limite = Number(req.query.limit);
-    const cidades = yield pessoas_1.PessoasProvider.getAll(req.query.page || 1, limite || 7, req.query.filter || '');
+    const result = yield pessoas_1.PessoasProvider.getAll(req.query.page || 1, limite || 7, req.query.filter || '');
     const count = yield pessoas_1.PessoasProvider.count(req.query.filter);
-    if (cidades instanceof Error) {
+    if (result instanceof Error) {
         return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
             errors: {
-                default: cidades.message,
+                default: result.message,
             }
         });
     }
@@ -64,6 +64,6 @@ const getAll = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
     res.setHeader('access-control-expose-headers', 'x-total-count');
     res.setHeader('x-total-count', 1);
-    return res.status(http_status_codes_1.StatusCodes.OK).json(cidades);
+    return res.status(http_status_codes_1.StatusCodes.OK).json(result);
 });
 exports.getAll = getAll;

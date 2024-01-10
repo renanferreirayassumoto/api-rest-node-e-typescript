@@ -9,23 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = void 0;
-const client_1 = require("@prisma/client");
-const services_1 = require("../../../shared/services");
-const prisma = new client_1.PrismaClient();
-const create = (usuario) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const hashedPassword = yield services_1.PasswordCrypto.hashPassword(usuario.senha);
-        usuario.senha = hashedPassword;
-        const result = yield prisma.usuario.create({
-            data: usuario
-        });
-        if (result) {
-            return result.id;
-        }
-    }
-    catch (error) {
-        return new Error('Erro ao criar usuário');
-    }
+exports.PasswordCrypto = void 0;
+const bcryptjs_1 = require("bcryptjs");
+const SALT_RANDOMS = 10;
+const hashPassword = (password) => __awaiter(void 0, void 0, void 0, function* () {
+    const saltGenerated = yield (0, bcryptjs_1.genSalt)(SALT_RANDOMS);
+    return yield (0, bcryptjs_1.hash)(password, saltGenerated);
 });
-exports.create = create;
+const verifyPassword = (password, hashedPassword) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield (0, bcryptjs_1.compare)(password, hashedPassword);
+});
+exports.PasswordCrypto = {
+    hashPassword,
+    verifyPassword,
+};

@@ -37,6 +37,7 @@ const yup = __importStar(require("yup"));
 const middleware_1 = require("../../shared/middleware");
 const http_status_codes_1 = require("http-status-codes");
 const usuarios_1 = require("../../database/providers/usuarios");
+const services_1 = require("../../shared/services");
 exports.signInValidation = (0, middleware_1.validation)((getSchema) => ({
     body: getSchema(yup.object().shape({
         email: yup.string().required().email().min(5),
@@ -45,15 +46,16 @@ exports.signInValidation = (0, middleware_1.validation)((getSchema) => ({
 }));
 const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, senha } = req.body;
-    const result = yield usuarios_1.UsuariosProvider.getByEmail(email);
-    if (result instanceof Error) {
+    const usuario = yield usuarios_1.UsuariosProvider.getByEmail(email);
+    if (usuario instanceof Error) {
         return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).json({
             errors: {
                 default: 'Email ou senha são inválidos'
             }
         });
     }
-    if (senha !== result.senha) {
+    const passwordMatch = yield services_1.PasswordCrypto.verifyPassword(senha, usuario.senha);
+    if (!passwordMatch) {
         return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).json({
             errors: {
                 default: 'Email ou senha são inválidos'
@@ -61,9 +63,15 @@ const signIn = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         });
     }
     else {
-        return res.status(http_status_codes_1.StatusCodes.OK).json({
-            accessToken: 'teste.teste.teste'
-        });
+        const accessToken = services_1.JWTService.sign({ uid: usuario.id });
+        if (accessToken === 'JWT_SECRET_NOT_FOUND') {
+            return res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).json({
+                errors: {
+                    default: 'Erro ao gerar o token de acesso'
+                }
+            });
+        }
+        return res.status(http_status_codes_1.StatusCodes.OK).json({ accessToken });
     }
 });
 exports.signIn = signIn;
