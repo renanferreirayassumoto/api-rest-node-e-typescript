@@ -1,12 +1,18 @@
 import { PrismaClient } from '@prisma/client';
 import { IUsuario } from '../../models';
+import { PasswordCrypto } from '../../../shared/services';
 
 const prisma = new PrismaClient();
 
 export const create = async (usuario: Omit<IUsuario, 'id'>)=>{
 	try{
+
+		const hashedPassword = await PasswordCrypto.hashPassword(usuario.senha);
+
+		usuario.senha = hashedPassword;
+
 		const result = await prisma.usuario.create({
-			data: usuario,
+			data: usuario
 		});
 
 		if (result) {

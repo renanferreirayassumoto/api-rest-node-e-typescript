@@ -22,13 +22,13 @@ export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Respons
 
 	const limite = Number(req.query.limit);
 
-	const cidades = await PessoasProvider.getAll(req.query.page || 1, limite || 7, req.query.filter || '');
+	const result = await PessoasProvider.getAll(req.query.page || 1, limite || 7, req.query.filter || '');
 	const count = await PessoasProvider.count(req.query.filter);
 
-	if (cidades instanceof Error){
+	if (result instanceof Error){
 		return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
 			errors: {
-				default: cidades.message,
+				default: result.message,
 			}
 		});
 	}else if(count instanceof Error){
@@ -41,5 +41,5 @@ export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Respons
 	res.setHeader('access-control-expose-headers', 'x-total-count');
 	res.setHeader('x-total-count', 1);
 
-	return res.status(StatusCodes.OK).json(cidades);
+	return res.status(StatusCodes.OK).json(result);
 };
