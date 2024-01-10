@@ -16,8 +16,6 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
 		});
 	}
 
-	console.log(authorization);
-
 	const [type, token] = authorization.split(' ');
 
 	if (type !== 'Bearer') {

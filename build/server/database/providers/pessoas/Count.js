@@ -26,7 +26,6 @@ const count = (filter = '') => __awaiter(void 0, void 0, void 0, function* () {
         return new Error('Erro ao consultar a quantidade total de registros');
     }
     catch (error) {
-        console.log(error);
         return new Error('Erro ao consultar a quantidade total de registros');
     }
 });

@@ -21,7 +21,6 @@ const ensureAuthenticated = (req, res, next) => __awaiter(void 0, void 0, void 0
             }
         });
     }
-    console.log(authorization);
     const [type, token] = authorization.split(' ');
     if (type !== 'Bearer') {
         return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).json({

@@ -17,7 +17,6 @@ export const count = async (filter = '') =>{
 
 		return new Error('Erro ao consultar a quantidade total de registros');
 	} catch (error) {
-		console.log(error);
 		return new Error('Erro ao consultar a quantidade total de registros');
 	}
 };
