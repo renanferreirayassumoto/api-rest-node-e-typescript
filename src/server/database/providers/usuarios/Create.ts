@@ -12,7 +12,9 @@ export const create = async (usuario: Omit<IUsuario, 'id'>)=>{
 		usuario.senha = hashedPassword;
 
 		const result = await prisma.usuario.create({
+
 			data: usuario
+      
 		});
 
 		if (result) {
