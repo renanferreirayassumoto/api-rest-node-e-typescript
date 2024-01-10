@@ -6,7 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 
 const router = Router();
 
-const swaggerOptions = {
+const options = {
 	swaggerDefinition: {
 		info: {
 			title: 'Api JWT',
@@ -34,8 +34,8 @@ const swaggerOptions = {
 	]
 };
 
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
-router.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+const specs = swaggerJsDoc(options);
+router.use('/doc', swaggerUi.serve, swaggerUi.setup(specs));
 
 /**
  * @swagger

@@ -11,7 +11,7 @@ const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const router = (0, express_1.Router)();
 exports.router = router;
-const swaggerOptions = {
+const options = {
     swaggerDefinition: {
         info: {
             title: 'Api JWT',
@@ -38,8 +38,8 @@ const swaggerOptions = {
         }
     ]
 };
-const swaggerDocs = (0, swagger_jsdoc_1.default)(swaggerOptions);
-router.use('/doc', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocs));
+const specs = (0, swagger_jsdoc_1.default)(options);
+router.use('/doc', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs));
 /**
  * @swagger
  * tags:
