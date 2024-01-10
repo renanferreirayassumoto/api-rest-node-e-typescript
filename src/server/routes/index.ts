@@ -6,6 +6,11 @@ import swaggerUi from 'swagger-ui-express';
 
 const router = Router();
 
+// CDN CSS
+
+const CSS_URL =
+  'https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css';
+
 const swaggerOptions = {
 	swaggerDefinition: {
 		info: {
@@ -35,7 +40,7 @@ const swaggerOptions = {
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-router.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+router.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerDocs, { customCssUrl: CSS_URL }));
 
 /**
  * @swagger
